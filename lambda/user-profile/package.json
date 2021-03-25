@@ -1,0 +1,17 @@
+{
+  "name": "user-profile",
+  "version": "1.0.0",
+  "description": "Validate and return user profile info.",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:615957311180:function:user-profile --zip-file fileb://Lambda-Deployment.zip",
+    "predeploy": "zip -r Lambda-Deployment.zip * -x *.zip *.json *.log *~"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
