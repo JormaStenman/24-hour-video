@@ -36,6 +36,7 @@ const getTokenInfo = async (awsCallback, token) => {
                 }
             }
         );
+        // noinspection JSUnresolvedVariable
         awsCallback(null, response.data);
     } catch (error) {
         if (error.response) {
@@ -63,11 +64,11 @@ exports.handler = (event, context, callback) => {
     }
 
     const token = event.authToken.split(' ')[1];
-    const key = new Buffer.from(cert);
+    const key = Buffer.from(cert);
 
-    jwt.verify(token, key, {algorithms: ['RS256']}, (err, decoded) => {
+    jwt.verify(token, key, {algorithms: ['RS256']}, err => {
         if (err) {
-            const msg = 'Failed JWT verification: ' + err;
+            const msg = 'JWT verification failed: ' + err;
             callback(msg);
             return;
         }
