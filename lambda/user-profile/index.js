@@ -1,11 +1,13 @@
 'use strict';
 
 const axios = require('axios');
+const auth0Domain = process.env.AUTH0_DOMAIN;
 
 const getTokenInfo = async (awsCallback, token) => {
     try {
+        console.log('sending request to Auth0');
         const response = await axios.post(
-            `https://${process.env.DOMAIN}/userinfo`,
+            `https://${auth0Domain}/userinfo`,
             {},
             {
                 headers: {
@@ -13,6 +15,7 @@ const getTokenInfo = async (awsCallback, token) => {
                 }
             }
         );
+        console.log('response:', response);
         // noinspection JSUnresolvedVariable
         awsCallback(null, response.data);
     } catch (error) {
@@ -37,6 +40,11 @@ exports.handler = (event, context, callback) => {
     // noinspection JSUnresolvedVariable
     if (!event.authToken) {
         callback('Could not find authToken.');
+        return;
+    }
+
+    if (!auth0Domain) {
+        callback('set AUTH0_DOMAIN env variable');
         return;
     }
 

@@ -3,14 +3,10 @@
   "version": "1.0.0",
   "description": "Set transcoded video acl function",
   "main": "index.js",
-  "scripts": {
-    "deploy": "aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:615957311180:function:set-permissions --zip-file fileb://Lambda-Deployment.zip",
-    "predeploy": "zip -r Lambda-Deployment.zip * -x *.zip *.json *.log"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.868.0"
+    "@aws-sdk/client-s3": "^3.10.0"
   }
 }

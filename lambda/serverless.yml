@@ -1,0 +1,70 @@
+---
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: twentyfour-hour-video
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  memorySize: 128
+  lambdaHashingVersion: 20201221
+
+package:
+  individually: true
+  excludeDevDependencies: true
+  exclude:
+    - '*/**'
+    - '**'
+
+custom:
+  auth0-domain: dev-kk-pm4fd.eu.auth0.com
+
+functions:
+  custom-authorizer:
+    handler: custom-authorizer/index.handler
+    role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
+    package:
+      include:
+        - custom-authorizer/**
+
+  user-profile:
+    handler: user-profile/index.handler
+    role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
+    package:
+      include:
+        - user-profile/**
+    environment:
+      AUTH0_DOMAIN: ${self:custom.auth0-domain}
+
+  set-permissions:
+    handler: set-permissions/index.handler
+    role: 'arn:aws:iam::615957311180:role/lambda-s3-execution-role'
+    package:
+      include:
+        - set-permissions/**
+
+  transcode-video:
+    handler: transcode-video/index.handler
+    role: 'arn:aws:iam::615957311180:role/lambda-s3-execution-role'
+    package:
+      include:
+        - transcode-video/**

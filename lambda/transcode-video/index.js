@@ -1,17 +1,18 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const elasticTranscoder = new AWS.ElasticTranscoder({
-    region: 'us-east-1',
-});
+const {ElasticTranscoderClient, CreateJobCommand} = require('@aws-sdk/client-elastic-transcoder');
+
+const elasticTranscoder = new ElasticTranscoderClient({region: 'us-east-1'});
+
+async function createJob(params) {
+    await elasticTranscoder.send(new CreateJobCommand(params));
+}
 
 exports.handler = (event, context, callback) => {
+    // noinspection JSUnresolvedVariable
     const key = event.Records[0].s3.object.key;
     const sourceKey = decodeURIComponent(key.replace(/\+g/, ' '));
     const outputKey = sourceKey.split('.')[0];
-    console.log('key:', key);
-    console.log('sourceKey:', sourceKey);
-    console.log('outputKey:', outputKey);
     const params = {
         PipelineId: '1616415202996-n3m5q3',
         OutputKeyPrefix: outputKey + '/',
@@ -33,7 +34,5 @@ exports.handler = (event, context, callback) => {
             },
         ],
     };
-    elasticTranscoder.createJob(params, (err, data) => {
-        if (err) callback(err);
-    });
+    createJob(params).catch(err => callback(err));
 }

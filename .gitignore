@@ -1,4 +1,4 @@
-node_modules/
-.idea/
 *~
-Lambda-Deployment.zip
+.idea/
+.serverless/
+node_modules/
