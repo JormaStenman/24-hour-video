@@ -35,6 +35,9 @@ package:
     - '*/**'
     - '**'
 
+plugins:
+  - serverless-webpack
+
 custom:
   auth0-domain: dev-kk-pm4fd.eu.auth0.com
 

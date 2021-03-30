@@ -5,7 +5,7 @@ import {Route, Switch} from "react-router-dom";
 import Navbar from "./app/Navbar";
 import {useAuth0} from "@auth0/auth0-react";
 
-const userProfileUrl = 'https://chdpvoeon7.execute-api.us-east-1.amazonaws.com/dev/user-profile';
+const userProfileUrl = 'https://jbm3qrd33k.execute-api.us-east-1.amazonaws.com/dev/user-profile';
 
 const UserInfoThroughAWS = () => {
     const [loading, setLoading] = useState(false);
