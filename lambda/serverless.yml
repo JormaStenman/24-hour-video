@@ -42,6 +42,16 @@ custom:
   auth0-domain: dev-kk-pm4fd.eu.auth0.com
 
 functions:
+  get-video-list:
+    handler: get-video-list/index.handler
+    role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
+    package:
+      include:
+        - get-video-list/**
+    environment:
+      BUCKET: 'me-stenman-serverless-video-transcoded'
+      SUFFIX: '.mp4'
+
   custom-authorizer:
     handler: custom-authorizer/index.handler
     role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'

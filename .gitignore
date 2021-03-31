@@ -1,4 +1,6 @@
 *~
 .idea/
 .serverless/
+.webpack
+log
 node_modules/
