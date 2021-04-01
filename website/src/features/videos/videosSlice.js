@@ -17,7 +17,7 @@ const shouldReload = videosSlice => !videosSlice.loading && videosSlice.doReload
 function jsonReviver(key, value) {
     switch (key) {
         case 'filename':
-            const match = value.match(/-(.+?)\.mp4$/i);
+            const match = value.match(/\d+x(\d+p)/i);
             if (match) {
                 this.videoQuality = match[1].toLowerCase();
             }
@@ -32,10 +32,9 @@ function jsonReviver(key, value) {
 export const fetchAllVideos = createAsyncThunk(
     `${sliceName}/fetchAllVideos`,
     async (accessToken, {getState, rejectWithValue}) => {
+        const videoQuality = selectVideosSlice(getState()).videoQuality;
         const url = buildUrl('https://jbm3qrd33k.execute-api.us-east-1.amazonaws.com/dev/videos', {
-            queryParams: {
-                encoding: selectVideosSlice(getState()).videoQuality,
-            },
+            queryParams: videoQuality ? {encoding: videoQuality} : {},
         });
         try {
             const response = await fetch(url, {
@@ -47,9 +46,9 @@ export const fetchAllVideos = createAsyncThunk(
             if (response.ok) {
                 return JSON.parse(bodyText, jsonReviver);
             }
-            rejectWithValue(`${response.statusText} (${response.status}): ${bodyText}`);
+            return rejectWithValue(`HTTP ${response.status}: ${bodyText}`);
         } catch (e) {
-            rejectWithValue(e);
+            return rejectWithValue(e);
         }
     },
     {
@@ -90,7 +89,7 @@ export const videosSlice = createSlice({
         })
         .addMatcher(action => action.type.endsWith('/rejected'), (state, action) => {
             state.loading = false;
-            state.error = action.error.message;
+            state.error = action.payload;
         })
     ,
 });

@@ -31,9 +31,6 @@ provider:
 package:
   individually: true
   excludeDevDependencies: true
-  exclude:
-    - '*/**'
-    - '**'
 
 plugins:
   - serverless-webpack
@@ -45,9 +42,6 @@ functions:
   get-video-list:
     handler: get-video-list/index.handler
     role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
-    package:
-      include:
-        - get-video-list/**
     environment:
       BUCKET: 'me-stenman-serverless-video-transcoded'
       SUFFIX: '.mp4'
@@ -55,29 +49,21 @@ functions:
   custom-authorizer:
     handler: custom-authorizer/index.handler
     role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
-    package:
-      include:
-        - custom-authorizer/**
 
   user-profile:
     handler: user-profile/index.handler
     role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
-    package:
-      include:
-        - user-profile/**
     environment:
       AUTH0_DOMAIN: ${self:custom.auth0-domain}
 
   set-permissions:
     handler: set-permissions/index.handler
     role: 'arn:aws:iam::615957311180:role/lambda-s3-execution-role'
-    package:
-      include:
-        - set-permissions/**
 
   transcode-video:
     handler: transcode-video/index.handler
     role: 'arn:aws:iam::615957311180:role/lambda-s3-execution-role'
-    package:
-      include:
-        - transcode-video/**
+    environment:
+      BUCKET: 'me-stenman-serverless-video-transcoded'
+      MEDIA_ROLE: 'arn:aws:iam::615957311180:role/media-convert-role'
+      MEDIA_ENDPOINT: 'https://vasjpylpa.mediaconvert.us-east-1.amazonaws.com'

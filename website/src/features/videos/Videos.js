@@ -44,7 +44,7 @@ export default () => {
                 <Table.Cell>{new Date(video.date).toUTCString()}</Table.Cell>
                 <Table.Cell>{video.videoQuality}</Table.Cell>
                 <Table.Cell textAlign='center'>
-                    <video width='640' height='480' controls controlsList='nodownload' preload='metadata'>
+                    <video width='640' height='360' controls controlsList='nodownload' preload='metadata'>
                         <source type='video/mp4' src={`${baseUrl}${video.filename}`}/>
                         Your browser does not support the &lt;video/&gt; tag.
                     </video>
@@ -59,17 +59,18 @@ export default () => {
 
     const sizeOptions = [
         {
-            key: 'ALL',
             value: '',
             text: 'ALL',
         },
         {
-            key: '720p',
+            value: '480p',
+            text: '480p',
+        },
+        {
             value: '720p',
             text: '720p',
         },
         {
-            key: '1080p',
             value: '1080p',
             text: '1080p',
         },
