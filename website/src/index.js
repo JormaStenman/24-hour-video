@@ -6,24 +6,32 @@ import App from './App';
 import store from './app/store';
 import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter} from "react-router-dom";
+import {Router} from "react-router-dom";
 import {Auth0Provider} from "@auth0/auth0-react";
+import {createBrowserHistory} from "history";
+
+const history = createBrowserHistory();
+
+const onRedirectCallback = appState => {
+    history.replace((appState && appState.returnTo) || window.location.pathname);
+};
 
 ReactDOM.render(
     // <React.StrictMode>
-    <BrowserRouter>
-        <Provider store={store}>
-            <Auth0Provider
-                domain="dev-kk-pm4fd.eu.auth0.com"
-                clientId="p7J0yqTvGO21THopTrTr7oaTyFHglUGn"
-                redirectUri={window.location.origin}
-                audience="https://dev-kk-pm4fd.eu.auth0.com/api/v2/"
-                scope="read:current_user update:current_user_metadata"
-            >
+    <Router history={history}>
+        <Auth0Provider
+            domain="dev-kk-pm4fd.eu.auth0.com"
+            clientId="p7J0yqTvGO21THopTrTr7oaTyFHglUGn"
+            redirectUri={window.location.origin}
+            audience="https://dev-kk-pm4fd.eu.auth0.com/api/v2/"
+            scope="read:current_user update:current_user_metadata"
+            onRedirectCallback={onRedirectCallback}
+        >
+            <Provider store={store}>
                 <App/>
-            </Auth0Provider>
-        </Provider>
-    </BrowserRouter>
+            </Provider>
+        </Auth0Provider>
+    </Router>
     // </React.StrictMode>
     ,
     document.getElementById('root')

@@ -54,8 +54,9 @@ exports.handler = (event, context, callback) => {
                 files: objects.Contents
                     .filter(item => item.Key.toLowerCase().endsWith(matchSuffix()))
                     .map(item => ({
-                        filename: item.Key,
+                        date: item.LastModified,
                         eTag: item.ETag.replace(/"/g, ''),
+                        filename: item.Key,
                         size: item.Size,
                     }))
             };
