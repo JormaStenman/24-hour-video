@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchAllVideos, selectVideosSlice, videosSelectors} from "./videosSlice";
+import {fetchAllVideos, selectVideosSlice, setVideoQuality, videosSelectors} from "./videosSlice";
 import {Container, Form, Message, Placeholder, Table} from "semantic-ui-react";
 import useAccessToken from "../../app/useAccessToken";
 
@@ -12,23 +12,22 @@ export default () => {
     const loading = useSelector(state => selectVideosSlice(state).loading);
     const loadError = useSelector(state => selectVideosSlice(state).error);
     const baseUrl = useSelector(state => selectVideosSlice(state).baseUrl);
-    const [videoSize, setVideoSize] = useState('');
+    const videoQuality = useSelector(state => selectVideosSlice(state).videoQuality);
 
     useEffect(() => {
         (async () => {
             if (accessToken) {
-                console.log('getting videos');
                 // noinspection JSCheckFunctionSignatures
-                dispatch(fetchAllVideos({accessToken, size: videoSize}));
+                dispatch(fetchAllVideos(accessToken));
             }
         })();
-    }, [accessToken, dispatch, videoSize]);
+    }, [accessToken, dispatch]);
 
     const tableBody = () => {
         if (loading) {
             return (
                 <Table.Row key='1'>
-                    <Table.Cell colSpan='2'>
+                    <Table.Cell colSpan='3'>
                         <Placeholder fluid>
                             <Placeholder.Header>
                                 <Placeholder.Line length='full'/>
@@ -43,8 +42,9 @@ export default () => {
         return videos.map(video => (
             <Table.Row key={video.eTag} verticalAlign='top'>
                 <Table.Cell>{new Date(video.date).toUTCString()}</Table.Cell>
-                <Table.Cell>
-                    <video width='100%' height='100%' controls>
+                <Table.Cell>{video.videoQuality}</Table.Cell>
+                <Table.Cell textAlign='center'>
+                    <video width='640' height='480' controls controlsList='nodownload' preload='metadata'>
                         <source type='video/mp4' src={`${baseUrl}${video.filename}`}/>
                         Your browser does not support the &lt;video/&gt; tag.
                     </video>
@@ -80,19 +80,22 @@ export default () => {
             <Form>
                 <Form.Select
                     options={sizeOptions}
-                    label='Video size'
-                    placeholder='Select video size'
+                    label='Video quality'
+                    placeholder='Select video quality'
                     onChange={(_, {value}) => {
-                        setVideoSize(value);
+                        dispatch(setVideoQuality(value));
+                        // noinspection JSCheckFunctionSignatures
+                        dispatch(fetchAllVideos(accessToken));
                     }}
-                    value={videoSize}
+                    value={videoQuality}
                 />
             </Form>
             <Table striped>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell width={2}>Date</Table.HeaderCell>
-                        <Table.HeaderCell width={14}>Video</Table.HeaderCell>
+                        <Table.HeaderCell width={2}>Quality</Table.HeaderCell>
+                        <Table.HeaderCell width={12}>Video</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -102,4 +105,4 @@ export default () => {
         </Container>
     );
 
-}
+};

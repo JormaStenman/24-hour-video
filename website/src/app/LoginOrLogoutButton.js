@@ -13,7 +13,9 @@ export default () => {
     }
 
     if (!isAuthenticated) {
-        return <Button onClick={() => loginWithRedirect()}>Log In</Button>
+        return <Button onClick={() => loginWithRedirect({
+            redirectUri: window.location.origin + '/main',
+        })}>Log In</Button>
     }
 
     if (!user) {
@@ -21,7 +23,7 @@ export default () => {
     }
 
     return (
-        <Button as='div' labelPosition='left' onClick={() => logout({returnTo: window.location.origin})}>
+        <Button as='div' labelPosition='left' onClick={() => logout({returnTo: window.location.origin + '/main'})}>
             <Label basic>
                 <Image avatar spaced src={user.picture} alt={user.name}/>
                 {user.name}

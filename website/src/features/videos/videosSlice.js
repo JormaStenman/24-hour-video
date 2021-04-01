@@ -12,14 +12,29 @@ export const selectVideosSlice = state => state[sliceName];
 
 export const videosSelectors = entityAdapter.getSelectors(state => selectVideosSlice(state));
 
-const shouldReload = videosSlice => !videosSlice.loading;
+const shouldReload = videosSlice => !videosSlice.loading && videosSlice.doReload;
+
+function jsonReviver(key, value) {
+    switch (key) {
+        case 'filename':
+            const match = value.match(/-(.+?)\.mp4$/i);
+            if (match) {
+                this.videoQuality = match[1].toLowerCase();
+            }
+            return value;
+        case 'date':
+            return Date.parse(value);
+        default:
+            return value;
+    }
+}
 
 export const fetchAllVideos = createAsyncThunk(
     `${sliceName}/fetchAllVideos`,
-    async ({accessToken, size}, {rejectWithValue}) => {
+    async (accessToken, {getState, rejectWithValue}) => {
         const url = buildUrl('https://jbm3qrd33k.execute-api.us-east-1.amazonaws.com/dev/videos', {
             queryParams: {
-                encoding: size,
+                encoding: selectVideosSlice(getState()).videoQuality,
             },
         });
         try {
@@ -30,7 +45,7 @@ export const fetchAllVideos = createAsyncThunk(
             });
             const bodyText = await response.text();
             if (response.ok) {
-                return JSON.parse(bodyText, (key, value) => key === 'date' ? Date.parse(value) : value);
+                return JSON.parse(bodyText, jsonReviver);
             }
             rejectWithValue(`${response.statusText} (${response.status}): ${bodyText}`);
         } catch (e) {
@@ -48,14 +63,22 @@ export const videosSlice = createSlice({
         loading: false,
         error: null,
         baseUrl: null,
-        lastLoaded: 0,
+        videoQuality: '',
+        doReload: true,
     }),
-    reducers: {},
+    reducers: {
+        setVideoQuality: (state, action) => {
+            if (action.payload !== state.videoQuality) {
+                state.doReload = true;
+            }
+            state.videoQuality = action.payload;
+        }
+    },
     extraReducers: builder => builder
         .addCase(fetchAllVideos.fulfilled, (state, action) => {
             entityAdapter.setAll(state, action.payload.files);
             state.baseUrl = action.payload.baseUrl;
-            state.lastLoaded = Date.now();
+            state.doReload = false;
         })
         .addMatcher(action => action.type.endsWith('/pending'), state => {
             state.loading = true;
@@ -71,5 +94,7 @@ export const videosSlice = createSlice({
         })
     ,
 });
+
+export const {setVideoQuality} = videosSlice.actions;
 
 export default videosSlice.reducer;
