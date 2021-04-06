@@ -44,7 +44,14 @@ export default () => {
                 <Table.Cell>{new Date(video.date).toUTCString()}</Table.Cell>
                 <Table.Cell>{video.videoQuality}</Table.Cell>
                 <Table.Cell textAlign='center'>
-                    <video width='640' height='360' controls controlsList='nodownload' preload='metadata'>
+                    <video
+                        controls
+                        controlsList='nodownload'
+                        height='360'
+                        muted
+                        preload='auto'
+                        width='640'
+                    >
                         <source type='video/mp4' src={`${baseUrl}${video.filename}`}/>
                         Your browser does not support the &lt;video/&gt; tag.
                     </video>
