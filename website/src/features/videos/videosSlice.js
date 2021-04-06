@@ -63,14 +63,14 @@ export const videosSlice = createSlice({
         error: null,
         baseUrl: null,
         videoQuality: '',
-        doReload: true,
+        doReload: false,
     }),
     reducers: {
         setVideoQuality: (state, action) => {
             if (action.payload !== state.videoQuality) {
                 state.doReload = true;
+                state.videoQuality = action.payload;
             }
-            state.videoQuality = action.payload;
         }
     },
     extraReducers: builder => builder

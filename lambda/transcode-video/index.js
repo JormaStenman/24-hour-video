@@ -4,7 +4,8 @@ const {MediaConvertClient, CreateJobCommand} = require('@aws-sdk/client-mediacon
 const getEnv = require('../util/getEnv');
 
 async function createJob(client, params) {
-    await client.send(new CreateJobCommand(params));
+    const response = await client.send(new CreateJobCommand(params));
+    console.log('MediaConvert job response', response);
 }
 
 exports.handler = (event, context, callback) => {
@@ -17,12 +18,18 @@ exports.handler = (event, context, callback) => {
     const mediaConvertClient = new MediaConvertClient({region: 'us-east-1', endpoint: env.MEDIA_ENDPOINT});
     // noinspection JSUnresolvedVariable
     const key = event.Records[0].s3.object.key;
-    const sourceKey = decodeURIComponent(key.replace(/\+g/, ' '));
+    const sourceKey = decodeURIComponent(key.replace(/\+/g, ' '));
     const outputKey = sourceKey.split('.')[0];
     // noinspection JSUnresolvedVariable
-    const input = `s3://${event.Records[0].s3.bucket.name}/${key}`;
+    const input = `s3://${event.Records[0].s3.bucket.name}/${sourceKey}`;
     // noinspection JSUnresolvedVariable
     const output = `s3://${env.BUCKET}/${outputKey}/`;
+
+    // console.log('key', key);
+    // console.log('sourceKey', sourceKey);
+    // console.log('outputKey', outputKey);
+    // console.log('input', input);
+    // console.log('output', output);
 
     // noinspection JSUnresolvedVariable
     const jobParams = {
@@ -30,10 +37,12 @@ exports.handler = (event, context, callback) => {
         'Settings': {
             'Inputs': [{
                 'FileInput': input,
-                'AudioSelectors': {
-                    'Audio Selector 1': {
-                        'SelectorType': 'TRACK',
-                        'Tracks': [1]
+                "AudioSelectors": {
+                    "Audio Selector 1": {
+                        "Offset": 0,
+                        "DefaultSelection": "DEFAULT",
+                        "SelectorType": "TRACK",
+                        "ProgramSelection": 1,
                     },
                 },
             }],

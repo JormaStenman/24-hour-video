@@ -15,11 +15,16 @@ exports.handler = (event, context, callback) => {
     // noinspection JSUnresolvedVariable
     const sourceBucket = message.Records[0].s3.bucket.name;
     // noinspection JSUnresolvedVariable
-    const sourceKey = decodeURIComponent(message.Records[0].s3.object.key.replace(/\+/g, ''));
+    const sourceKey = decodeURIComponent(message.Records[0].s3.object.key.replace(/\+/g, ' '));
+
+    // console.log('sourceBucket', sourceBucket);
+    // console.log('sourceKey', sourceKey);
+
     const params = {
         ACL: 'public-read',
         Bucket: sourceBucket,
         Key: sourceKey,
     };
+
     setAcl(params).catch(err => callback(err));
 }

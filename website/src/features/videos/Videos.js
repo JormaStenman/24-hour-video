@@ -85,8 +85,10 @@ export default () => {
                     placeholder='Select video quality'
                     onChange={(_, {value}) => {
                         dispatch(setVideoQuality(value));
-                        // noinspection JSCheckFunctionSignatures
-                        dispatch(fetchAllVideos(accessToken));
+                        if (accessToken) {
+                            // noinspection JSCheckFunctionSignatures
+                            dispatch(fetchAllVideos(accessToken));
+                        }
                     }}
                     value={videoQuality}
                 />
@@ -96,7 +98,7 @@ export default () => {
                     <Table.Row>
                         <Table.HeaderCell width={2}>Date</Table.HeaderCell>
                         <Table.HeaderCell width={2}>Quality</Table.HeaderCell>
-                        <Table.HeaderCell width={12}>Video</Table.HeaderCell>
+                        <Table.HeaderCell width={12} textAlign='center'>Video</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

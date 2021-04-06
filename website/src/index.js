@@ -8,9 +8,9 @@ import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import {Router} from "react-router-dom";
 import {Auth0Provider} from "@auth0/auth0-react";
-import {createBrowserHistory} from "history";
+import {createHashHistory as createHistory} from "history";
 
-const history = createBrowserHistory();
+const history = createHistory();
 
 const onRedirectCallback = appState => {
     history.replace((appState && appState.returnTo) || window.location.pathname);
@@ -22,7 +22,7 @@ ReactDOM.render(
         <Auth0Provider
             domain="dev-kk-pm4fd.eu.auth0.com"
             clientId="p7J0yqTvGO21THopTrTr7oaTyFHglUGn"
-            redirectUri={window.location.origin + '/main'}
+            redirectUri={window.location.origin}
             audience="https://dev-kk-pm4fd.eu.auth0.com/api/v2/"
             scope="read:current_user update:current_user_metadata"
             onRedirectCallback={onRedirectCallback}

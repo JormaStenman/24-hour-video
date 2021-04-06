@@ -25,9 +25,7 @@ function generatePolicy({principalId, effect = undefined, resource = undefined})
 }
 
 async function getCert() {
-    console.log('sending GetParameterCommand');
     const result = await ssmClient.send(new GetParameterCommand({Name: 'auth0-certificate'}));
-    console.log('result:', result);
     return result.Parameter.Value;
 }
 
@@ -35,7 +33,6 @@ function verifyJWT(cert, event, callback) {
     const key = Buffer.from(cert);
     // noinspection JSUnresolvedVariable
     const token = event.authorizationToken.split(' ')[1];
-    console.log(`verifying token ${token} with cert ${cert}`);
     jwt.verify(token, key, {algorithms: ['RS256']}, err => {
         if (err) {
             callback('JWT verification failed: ' + err);

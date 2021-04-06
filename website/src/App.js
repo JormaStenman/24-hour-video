@@ -8,7 +8,9 @@ import Main from "./app/Main";
 import {withAuthenticationRequired} from "@auth0/auth0-react";
 
 const ProtectedRoute = ({component, ...args}) => (
-    <Route component={withAuthenticationRequired(component)} {...args} />
+    <Route component={withAuthenticationRequired(component, {
+        returnTo: args['path'],
+    })} {...args} />
 );
 
 // eslint-disable-next-line import/no-anonymous-default-export
