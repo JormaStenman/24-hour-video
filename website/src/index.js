@@ -22,7 +22,7 @@ ReactDOM.render(
         <Auth0Provider
             domain="dev-kk-pm4fd.eu.auth0.com"
             clientId="p7J0yqTvGO21THopTrTr7oaTyFHglUGn"
-            redirectUri={window.location.origin}
+            redirectUri={window.location.origin + '/24-hour-video'}
             audience="https://dev-kk-pm4fd.eu.auth0.com/api/v2/"
             scope="read:current_user update:current_user_metadata"
             onRedirectCallback={onRedirectCallback}
