@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/24-hour-video/static/css/main.d3adcd4a.chunk.css",
-    "main.js": "/24-hour-video/static/js/main.779ebe24.chunk.js",
-    "main.js.map": "/24-hour-video/static/js/main.779ebe24.chunk.js.map",
+    "main.js": "/24-hour-video/static/js/main.2ccea277.chunk.js",
+    "main.js.map": "/24-hour-video/static/js/main.2ccea277.chunk.js.map",
     "runtime-main.js": "/24-hour-video/static/js/runtime-main.d022ec85.js",
     "runtime-main.js.map": "/24-hour-video/static/js/runtime-main.d022ec85.js.map",
     "static/css/2.4e936d75.chunk.css": "/24-hour-video/static/css/2.4e936d75.chunk.css",
@@ -19,6 +19,6 @@
     "static/css/2.4e936d75.chunk.css",
     "static/js/2.c5bc99e3.chunk.js",
     "static/css/main.d3adcd4a.chunk.css",
-    "static/js/main.779ebe24.chunk.js"
+    "static/js/main.2ccea277.chunk.js"
   ]
 }
