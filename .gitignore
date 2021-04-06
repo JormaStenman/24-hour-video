@@ -4,3 +4,4 @@
 .webpack
 log
 node_modules/
+build/
