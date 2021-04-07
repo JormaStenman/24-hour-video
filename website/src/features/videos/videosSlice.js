@@ -34,7 +34,7 @@ export const fetchAllVideos = createAsyncThunk(
     async (accessToken, {getState, rejectWithValue}) => {
         const videoQuality = selectVideosSlice(getState()).videoQuality;
         const url = buildUrl('https://jbm3qrd33k.execute-api.us-east-1.amazonaws.com/dev/videos', {
-            queryParams: videoQuality ? {encoding: videoQuality} : {},
+            queryParams: {encoding: videoQuality},
         });
         try {
             const response = await fetch(url, {
@@ -62,7 +62,7 @@ export const videosSlice = createSlice({
         loading: false,
         error: null,
         baseUrl: null,
-        videoQuality: '',
+        videoQuality: null,
         doReload: false,
     }),
     reducers: {

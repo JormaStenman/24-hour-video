@@ -12,10 +12,14 @@ export default () => (
                 The user must be registered and logged in to view any videos.
             </List.Item>
             <List.Item>
-                The video quality can be selected by the user, affecting the list of videos displayed.
+                The information of the logged-in user is displayed. This is fetched from Auth0 through AWS, which is
+                why it may take a while to appear after login.
             </List.Item>
             <List.Item>
-                The information of the logged-in user is displayed.
+                The video quality can be selected by the user, affecting the list of videos displayed. There are four
+                demo videos in total. Only one of them, the one with a bridge, is available in three qualities or
+                bitrates. The other three videos only have two quality variants to better demonstrate the effect
+                of the video quality selector.
             </List.Item>
         </List>
         <p>
