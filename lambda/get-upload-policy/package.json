@@ -1,0 +1,9 @@
+{
+  "name": "get-upload-policy",
+  "version": "1.0.0",
+  "description": "Get a policy allowing for upload of a file to an S3 bucket.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -39,6 +39,15 @@ custom:
   auth0-domain: dev-kk-pm4fd.eu.auth0.com
 
 functions:
+  get-upload-policy:
+    handler: get-upload-policy/index.handler
+    role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
+    environment:
+      ACCESS_KEY: 'AKIAY62PKV3GKCXPXEBA'
+      SECRET_ACCESS_KEY: '' # TODO: how to include safely?
+      UPLOAD_BUCKET: 'me-stenman-serverless-video-upload'
+      UPLOAD_URL: ''
+
   get-video-list:
     handler: get-video-list/index.handler
     role: 'arn:aws:iam::615957311180:role/api-gateway-lambda-exec-role'
